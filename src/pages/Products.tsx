@@ -28,7 +28,7 @@ const Products = ({ isLoading }: { isLoading: boolean }) => {
     if (!searchTerm) return true;
     const term = searchTerm.toLowerCase();
     return (
-      p.title.toLowerCase().includes(term),
+      p.title.toLowerCase().includes(term) ||
       p.category.toLowerCase().includes(term)
     );
   });
