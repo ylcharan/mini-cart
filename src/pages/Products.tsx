@@ -9,27 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useProductStore, { type Product } from "@/store/ProductStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Products = () => {
-  const { products, setProducts } = useProductStore();
+  const { products } = useProductStore();
   const [category, setCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    // Fetch products from API
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("https://dummyjson.com/products");
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchProducts();
-  }, [setProducts]);
 
   // Sorting by Category
   let filteredProducts =
@@ -41,7 +27,10 @@ const Products = () => {
   filteredProducts = filteredProducts.filter((p) => {
     if (!searchTerm) return true;
     const term = searchTerm.toLowerCase();
-    return p.title.toLowerCase().includes(term);
+    return (
+      p.title.toLowerCase().includes(term),
+      p.category.toLowerCase().includes(term)
+    );
   });
 
   // Sorting by Price
@@ -53,9 +42,9 @@ const Products = () => {
 
   return (
     <div className="">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center max-md:flex-col justify-between py-4">
         {/* Search Bar */}
-        <div className="flex items-center w-[40%] gap-2">
+        <div className="flex items-center w-[40%] max-md:w-full gap-2">
           <Input
             placeholder="Search with item name..."
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -65,9 +54,9 @@ const Products = () => {
         </div>
 
         {/* Select for sorting and filtering */}
-        <div className="flex items-center gap-4">
+        <div className="flex max-md:mt-4 max-md:w-full items-center gap-4">
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] max-md:w-full">
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>
             <SelectContent>
@@ -78,7 +67,7 @@ const Products = () => {
 
           {/* Select for category filtering */}
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[180px] max-md:w-[100%]">
               <SelectValue placeholder="Products" />
             </SelectTrigger>
             <SelectContent>

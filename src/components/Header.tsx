@@ -33,8 +33,8 @@ const Header = () => {
             <SelectValue placeholder={category} />
           </SelectTrigger>
           <SelectContent onChange={() => navigate(`/${category}`)}>
-            <SelectItem value="admin">Admin</SelectItem>
             <SelectItem value="user">User</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
           </SelectContent>
         </Select>
         <UserRound className="cursor-pointer" />

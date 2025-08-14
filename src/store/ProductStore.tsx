@@ -14,16 +14,19 @@ export type Product = {
 
 type ProductStore = {
   products: Product[];
+  recentlyAddedProducts: Product[];
   setProducts: (newProducts: Product[]) => void;
   addProduct: (product: Product) => void;
 };
 
 const useProductStore = create<ProductStore>((set) => ({
   products: [],
+  recentlyAddedProducts: [],
   setProducts: (newProducts) => set({ products: newProducts }),
   addProduct: (product) =>
     set((state) => ({
-      products: [...state.products, product],
+      products: [product, ...state.products],
+      recentlyAddedProducts: [product, ...state.recentlyAddedProducts],
     })),
 }));
 
