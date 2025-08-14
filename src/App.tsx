@@ -3,12 +3,13 @@ import Admin from "./pages/Admin.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useProductStore from "./store/ProductStore.tsx";
 import Products from "./pages/Products.tsx";
 
 const App = () => {
   const { setProducts } = useProductStore();
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch products from API
     const fetchProducts = async () => {
@@ -18,6 +19,8 @@ const App = () => {
         setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProducts();
@@ -28,7 +31,7 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Navigate to="/user" replace />} />
-          <Route path="/user" element={<Products />} />
+          <Route path="/user" element={<Products isLoading={isLoading} />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/user/:id" element={<ProductDetails />} />
         </Routes>

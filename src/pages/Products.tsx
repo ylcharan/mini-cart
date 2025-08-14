@@ -11,7 +11,7 @@ import {
 import useProductStore, { type Product } from "@/store/ProductStore";
 import { useState } from "react";
 
-const Products = () => {
+const Products = ({ isLoading }: { isLoading: boolean }) => {
   const { products } = useProductStore();
   const [category, setCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("");
@@ -89,15 +89,18 @@ const Products = () => {
       </div>
 
       {/* If no items were found it return text other wise it returns the items */}
-      {filteredProducts.length > 0 ? (
+
+      {isLoading && filteredProducts.length === 0 ? (
+        <p>Loading...</p>
+      ) : filteredProducts.length === 0 ? (
+        <div className="py-6">
+          <p className="text-gray-500">No products found.</p>
+        </div>
+      ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-6">
           {filteredProducts.map((product) => (
             <ProductCard product={product} key={product.id} />
           ))}
-        </div>
-      ) : (
-        <div className="py-6">
-          <p className="text-gray-500">No products found.</p>
         </div>
       )}
     </div>
